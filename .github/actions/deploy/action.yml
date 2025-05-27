@@ -44,6 +44,7 @@ runs:
       shell: bash
 
     - name: Deploy to ${{ inputs.environment }}
+      shell: bash
       run: ssh -i ./deploy.key www-data@${{ inputs.ssh-host }} 'python3 /opt/scripts/app-deploy-release/deploy.py /opt/git/releases/${{ inputs.app-to-deploy }} ${{ inputs.app-repository }} ${{ inputs.app-shortname }} --version {{ inputs.version }} --versions_to_keep=5 1> >(tee --append /var/log/deploy_{{ inputs.app-to-deploy }})'
 
     - name: Notify failure
