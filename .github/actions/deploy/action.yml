@@ -1,0 +1,62 @@
+name: Deploy
+description: Deploie un applicatif
+
+inputs:
+  app-to-deploy:
+    description: "Name of the application to deploy"
+    required: true
+  app-repository:
+    description: "Repository of the application to deploy"
+    required: true
+  app-shortname:
+    required: true
+  version:
+    description: "Version to deploy"
+    required: false
+    default: "main"
+  environment:
+    description: "Environment to deploy to"
+    required: true
+  ssh-key:
+    description: "SSH key used for the deployment"
+    required: true
+  ssh-host:
+    description: "SSH host"
+    required: true
+  notify-on-failure:
+    required: false
+    default: true
+  notify-on-success:
+    required: false
+    default: false
+  notify-webhook:
+    description: "Webhook to use for notifications"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{ inputs.ssh-key }}" > ./deploy.key
+        sudo chmod 600 ./deploy.key
+        ssh-keyscan -H ${{ inputs.ssh-host }} >> ~/.ssh/known_hosts
+      shell: bash
+
+    - name: Deploy to ${{ inputs.environment }}
+      shell: bash
+      run: ssh -i ./deploy.key www-data@${{ inputs.ssh-host }} 'python3 /opt/scripts/app-deploy-release/deploy.py /opt/git/releases/${{ inputs.app-to-deploy }} ${{ inputs.app-repository }} ${{ inputs.app-shortname }} --version {{ inputs.version }} --versions_to_keep=5 1> >(tee --append /var/log/deploy_{{ inputs.app-to-deploy }})'
+
+    - name: Notify failure
+      if: failure() && inputs.notify-on-failure
+      uses: ./.github/actions/notify
+      with:
+        message: "🚨 Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment }}** failed !"
+        hook: ${{ inputs.notify-webhook }}
+    
+    - name: Notify success
+      if: success() && inputs.notify-on-success
+      uses: ./.github/actions/notify
+      with:
+        message: ":white_check_mark: Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment}}** succeeded !"
+        hook: ${{ inputs.notify-webhook }}
