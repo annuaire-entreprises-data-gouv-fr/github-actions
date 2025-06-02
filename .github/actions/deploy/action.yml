@@ -49,14 +49,14 @@ runs:
 
     - name: Notify failure
       if: failure() && inputs.notify-on-failure
-      uses: ./.github/actions/notify
+      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
         message: "🚨 Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment }}** failed !"
         hook: ${{ inputs.notify-webhook }}
     
     - name: Notify success
       if: success() && inputs.notify-on-success
-      uses: ./.github/actions/notify
+      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
         message: ":white_check_mark: Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment}}** succeeded !"
         hook: ${{ inputs.notify-webhook }}
