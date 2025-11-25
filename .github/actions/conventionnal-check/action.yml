@@ -52,4 +52,5 @@ runs:
 
     - name: All checks passed
       if: success()
+      shell: bash
       run: echo "✅ Branch name, PR title and all commit messages conform to the configured conventions."
