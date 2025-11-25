@@ -1,0 +1,55 @@
+name: "Check Conventional Commits, Branch Naming & PR Title"
+description: >
+  Verifies that commit messages follow Conventional Commits, that branch names
+  respect a configurable pattern, and that PR titles follow a defined convention.
+branding:
+  icon: "git-commit"
+  color: "purple"
+
+inputs:
+  allowed-types:
+    description: "Pipe‑separated list of allowed commit types"
+    default: "feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
+  branch-regex:
+    description: "Regex that a branch name must match"
+    default: "^(feature|bugfix|hotfix|release)\\/\\d+-[a-z0-9-]+$"
+  pr-title-regex:
+    description: "Regex that a PR title must match"
+    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\$$[^\$$]+\\))?: .{1,72}$"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate branch name
+      id: branch
+      shell: bash
+      env:
+        BRANCH_REGEX: ${{ inputs.branch-regex }}
+      run: |
+        ./.github/actions/check-conventional/scripts/check-branch.sh
+
+    - name: Validate PR title
+      if: github.event_name == 'pull_request'
+      id: pr-title
+      shell: bash
+      env:
+        PR_REGEX: ${{ inputs.pr-title-regex }}
+      run: |
+        ./.github/actions/check-conventional/scripts/check-pr.sh
+
+    - name: Validate commit messages
+      id: commits
+      shell: bash
+      env:
+        ALLOWED_TYPES: ${{ inputs.allowed-types }}
+      run: |
+        ./.github/actions/check-conventional/scripts/check-commits.sh
+
+    - name: All checks passed
+      if: success()
+      run: echo "✅ Branch name, PR title and all commit messages conform to the configured conventions."
