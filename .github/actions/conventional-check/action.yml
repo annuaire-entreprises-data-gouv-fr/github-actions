@@ -30,8 +30,7 @@ runs:
       shell: bash
       env:
         BRANCH_REGEX: ${{ inputs.branch-regex }}
-      run: |
-        ./.github/actions/conventional-check/scripts/check-branch.sh
+      run: scripts/check-branch.sh
 
     - name: Validate PR title
       if: github.event_name == 'pull_request'
@@ -39,16 +38,14 @@ runs:
       shell: bash
       env:
         PR_REGEX: ${{ inputs.pr-title-regex }}
-      run: |
-        ./.github/actions/conventional-check/scripts/check-pr.sh
+      run: scripts/check-pr.sh
 
     - name: Validate commit messages
       id: commits
       shell: bash
       env:
         ALLOWED_TYPES: ${{ inputs.allowed-types }}
-      run: |
-        ./.github/actions/conventional-check/scripts/check-commits.sh
+      run: scripts/check-commits.sh
 
     - name: All checks passed
       if: success()
