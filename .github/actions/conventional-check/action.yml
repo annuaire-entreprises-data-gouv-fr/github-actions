@@ -20,6 +20,12 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: DEBUG
+      shell: bash
+      run: |
+        pwd;
+        ls -la;
+        cd .github && tree;
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
@@ -30,7 +36,7 @@ runs:
       run: |
         pwd;
         ls -la;
-        tree;
+        cd .github && tree;
 
     - name: Validate branch name
       id: branch
