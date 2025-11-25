@@ -20,30 +20,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: DEBUG
-      shell: bash
-      run: |
-        pwd;
-        ls -la;
-        cd .github && tree;
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-
-    - name: DEBUG
-      shell: bash
-      run: |
-        pwd;
-        ls -la;
-        cd .github && tree;
 
     - name: Validate branch name
       id: branch
       shell: bash
       env:
         BRANCH_REGEX: ${{ inputs.branch-regex }}
-      run: scripts/check-branch.sh
+      run: ${{ github.action_path }}/scripts/check-branch.sh
 
     - name: Validate PR title
       if: github.event_name == 'pull_request'
@@ -51,14 +38,14 @@ runs:
       shell: bash
       env:
         PR_REGEX: ${{ inputs.pr-title-regex }}
-      run: scripts/check-pr.sh
+      run: ${{ github.action_path }}/scripts/check-pr.sh
 
     - name: Validate commit messages
       id: commits
       shell: bash
       env:
         ALLOWED_TYPES: ${{ inputs.allowed-types }}
-      run: scripts/check-commits.sh
+      run: ${{ github.action_path }}/scripts/check-commits.sh
 
     - name: All checks passed
       if: success()
