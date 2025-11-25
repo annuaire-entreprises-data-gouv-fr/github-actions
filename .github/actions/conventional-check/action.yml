@@ -31,7 +31,7 @@ runs:
       env:
         BRANCH_REGEX: ${{ inputs.branch-regex }}
       run: |
-        ./.github/actions/check-conventional/scripts/check-branch.sh
+        ./.github/actions/conventional-check/scripts/check-branch.sh
 
     - name: Validate PR title
       if: github.event_name == 'pull_request'
@@ -40,7 +40,7 @@ runs:
       env:
         PR_REGEX: ${{ inputs.pr-title-regex }}
       run: |
-        ./.github/actions/check-conventional/scripts/check-pr.sh
+        ./.github/actions/conventional-check/scripts/check-pr.sh
 
     - name: Validate commit messages
       id: commits
@@ -48,7 +48,7 @@ runs:
       env:
         ALLOWED_TYPES: ${{ inputs.allowed-types }}
       run: |
-        ./.github/actions/check-conventional/scripts/check-commits.sh
+        ./.github/actions/conventional-check/scripts/check-commits.sh
 
     - name: All checks passed
       if: success()
