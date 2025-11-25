@@ -25,6 +25,13 @@ runs:
       with:
         fetch-depth: 0
 
+    - name: DEBUG
+      shell: bash
+      run: |
+        pwd;
+        ls -la;
+        tree;
+
     - name: Validate branch name
       id: branch
       shell: bash
