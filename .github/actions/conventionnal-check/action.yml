@@ -15,7 +15,7 @@ inputs:
     default: "^(feature|bugfix|hotfix|release)\\/\\d+-[a-z0-9-]+$"
   pr-title-regex:
     description: "Regex that a PR title must match"
-    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\$$[^\$$]+\\))?: .{1,72}$"
+    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert))?: .{1,72}$"
 
 runs:
   using: "composite"
