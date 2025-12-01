@@ -12,7 +12,7 @@ inputs:
     default: "feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
   branch-regex:
     description: "Regex that a branch name must match"
-    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert))/.{1,72}$"
+    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)\\/\\d+-[a-z0-9-]+$"
   pr-title-regex:
     description: "Regex that a PR title must match"
     default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert))?: .{1,72}$"

@@ -6,7 +6,7 @@ echo "🔎 Checking branch name: $BRANCH_NAME"
 if [[ ! "$BRANCH_NAME" =~ $BRANCH_REGEX ]]; then
   echo "❌ Branch name does NOT match the required pattern."
   echo "   Expected pattern: $BRANCH_REGEX"
-  echo "   Example: feature/1234-add-login-page"
+  echo "   Example: feat/1234-add-login-page"
   exit 1
 fi
 
