@@ -5,7 +5,7 @@ set -euo pipefail
 # For a push event we can use $GITHUB_SHA and $GITHUB_BASE_REF.
 # For a PR we use the diff against the target branch.
 if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
-  RANGE="${{ github.event.pull_request.base.sha }}..${GITHUB_SHA}"
+  RANGE="$BASE_COMMIT..${GITHUB_SHA}"
 else
   # In a push event, GITHUB_BEFORE is the previous HEAD.
   RANGE="${GITHUB_BEFORE}..${GITHUB_SHA}"
