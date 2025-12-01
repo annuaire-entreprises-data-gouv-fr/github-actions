@@ -26,10 +26,12 @@ runs:
         fetch-depth: 0
 
     - name: Validate branch name
+      if: github.event_name == 'pull_request'
       id: branch
       shell: bash
       env:
         BRANCH_REGEX: ${{ inputs.branch-regex }}
+        BRANCH_NAME: ${{ github.head_ref }}
       run: ${{ github.action_path }}/scripts/check-branch.sh
 
     - name: Validate PR title
