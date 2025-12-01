@@ -7,9 +7,6 @@ branding:
   color: "purple"
 
 inputs:
-  allowed-types:
-    description: "Pipe‑separated list of allowed commit types"
-    default: "feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert"
   branch-regex:
     description: "Regex that a branch name must match"
     default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)\\/[a-z0-9-]+$"
