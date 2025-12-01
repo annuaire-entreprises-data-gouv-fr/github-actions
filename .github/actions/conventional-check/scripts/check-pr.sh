@@ -2,10 +2,6 @@
 
 set -euo pipefail
 
-DEFAULT_PR_REGEX="^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)($$[^$$]+\))?: .{1,72}$"
-
-PR_REGEX="${PR_REGEX:-$DEFAULT_PR_REGEX}"
-
 if [[ -f "${GITHUB_EVENT_PATH:-}" ]]; then
   PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
 else
