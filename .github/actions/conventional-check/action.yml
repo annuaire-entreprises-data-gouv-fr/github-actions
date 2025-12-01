@@ -47,8 +47,8 @@ runs:
       if: github.event_name == 'pull_request'
       shell: bash
       env:
-        ALLOWED_TYPES: ${{ inputs.allowed-types }}
         BASE_COMMIT: ${{ github.event.pull_request.base.sha }}
+        REGEX: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$" 
       run: ${{ github.action_path }}/scripts/check-commits.sh
 
     - name: All checks passed

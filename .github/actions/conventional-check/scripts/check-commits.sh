@@ -18,14 +18,10 @@ git rev-list --reverse "$RANGE" | while read -r COMMIT; do
   MSG=$(git log -1 --pretty=%B "$COMMIT")
   FIRST_LINE=$(echo "$MSG" | head -n1)
 
-  # Conventional‑Commit regex (type(scope)?: subject)
-  REGEX="^(${ALLOWED_TYPES})($$[^$$]+\))?!?: .{1,72}$"
-
   if [[ ! "$FIRST_LINE" =~ $REGEX ]]; then
     echo "❌ Commit $COMMIT does NOT follow Conventional Commits."
     echo "   Message: $FIRST_LINE"
     echo "   Expected pattern: <type>(<scope>)?: <subject>"
-    echo "   Allowed types: ${ALLOWED_TYPES//|/, }"
     exit 1
   fi
 done
