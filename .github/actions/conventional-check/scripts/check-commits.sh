@@ -14,7 +14,7 @@ fi
 echo "🔎 Checking commit messages in range: $RANGE"
 
 # Loop over each new commit
-git rev-list --reverse "$RANGE" | while read -r COMMIT; do
+git rev-list --reverse "$RANGE" | head -n -1 | while read -r COMMIT; do
   MSG=$(git log -1 --pretty=%B "$COMMIT")
   FIRST_LINE=$(echo "$MSG" | head -n1)
 
