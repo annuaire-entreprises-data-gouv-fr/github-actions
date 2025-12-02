@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Checking branch name: $BRANCH_NAME"
+
+if [[ ! "$BRANCH_NAME" =~ $BRANCH_REGEX ]]; then
+  echo "❌ Branch name does NOT match the required pattern."
+  echo "   Expected pattern: $BRANCH_REGEX"
+  echo "   Example: feat/1234-add-login-page"
+  exit 1
+fi
+
+echo "✅ Branch name conforms."

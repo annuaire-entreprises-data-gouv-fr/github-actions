@@ -1,0 +1,54 @@
+name: "Check Conventional Commits, Branch Naming & PR Title"
+description: >
+  Verifies that commit messages follow Conventional Commits, that branch names
+  respect a configurable pattern, and that PR titles follow a defined convention.
+branding:
+  icon: "git-commit"
+  color: "purple"
+
+inputs:
+  branch-regex:
+    description: "Regex that a branch name must match"
+    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)\\/[a-z0-9-]+$"
+  pr-title-regex:
+    description: "Regex that a PR title must match"
+    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Validate branch name
+      if: github.event_name == 'pull_request'
+      id: branch
+      shell: bash
+      env:
+        BRANCH_REGEX: ${{ inputs.branch-regex }}
+        BRANCH_NAME: ${{ github.head_ref }}
+      run: ${{ github.action_path }}/scripts/check-branch.sh
+
+    - name: Validate PR title
+      if: github.event_name == 'pull_request'
+      id: pr-title
+      shell: bash
+      env:
+        PR_REGEX: ${{ inputs.pr-title-regex }}
+      run: ${{ github.action_path }}/scripts/check-pr.sh
+
+    - name: Validate commit messages
+      id: commits
+      if: github.event_name == 'pull_request'
+      shell: bash
+      env:
+        BASE_COMMIT: ${{ github.event.pull_request.base.sha }}
+        REGEX: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$" 
+      run: ${{ github.action_path }}/scripts/check-commits.sh
+
+    - name: All checks passed
+      if: success()
+      shell: bash
+      run: echo "✅ Branch name, PR title and all commit messages conform to the configured conventions."
