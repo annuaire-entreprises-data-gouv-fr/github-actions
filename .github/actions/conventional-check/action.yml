@@ -9,10 +9,10 @@ branding:
 inputs:
   branch-regex:
     description: "Regex that a branch name must match"
-    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)\\/[a-z0-9-]+$"
+    default: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)\\/[a-z0-9-]+$"
   pr-title-regex:
     description: "Regex that a PR title must match"
-    default: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$"
+    default: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$"
 
 runs:
   using: "composite"
@@ -45,7 +45,7 @@ runs:
       shell: bash
       env:
         BASE_COMMIT: ${{ github.event.pull_request.base.sha }}
-        REGEX: "^(feat|fix|docs|chore|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$" 
+        REGEX: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$" 
       run: ${{ github.action_path }}/scripts/check-commits.sh
 
     - name: All checks passed
