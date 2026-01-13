@@ -13,6 +13,12 @@ inputs:
   pr-title-regex:
     description: "Regex that a PR title must match"
     default: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$"
+  disable-branch-check:
+    description: "Set to true to disable branch name validation"
+    default: "false"
+  disable-commit-check:
+    description: "Set to true to disable commit message validation"
+    default: "false"
 
 runs:
   using: "composite"
@@ -23,7 +29,7 @@ runs:
         fetch-depth: 0
 
     - name: Validate branch name
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && inputs.disable-branch-check != 'true'
       id: branch
       shell: bash
       env:
@@ -41,11 +47,11 @@ runs:
 
     - name: Validate commit messages
       id: commits
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && inputs.disable-commit-check != 'true'
       shell: bash
       env:
         BASE_COMMIT: ${{ github.event.pull_request.base.sha }}
-        REGEX: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$" 
+        REGEX: "^(feat|fix|docs|chore|style|refactor|perf|test|build|ci|revert)(\\(.+\\))?: .{1,72}$"
       run: ${{ github.action_path }}/scripts/check-commits.sh
 
     - name: All checks passed
