@@ -1,10 +1,14 @@
 name: "Notify message"
-description: "Send message to tech team"
+description: "Envoie un message dans une room Tchap"
 
 inputs:
-  hook:
-    description: "Hook url"
-    required: true
+  tchap-url:
+    description: "URL Tchap qui sera appelé pour envoyer le message"
+  tchap-token:
+    description: "Jeton d'authentification utilisé"
+  trigger-notification:
+    description: "Si true, envoie une notification"
+    default: "true"
   message:
     description: "Body"
     required: true
@@ -14,5 +18,9 @@ runs:
 
   steps:
     - run: |
-        curl -X POST ${{ inputs.hook }} -H 'Content-Type: application/json' -d '{ "text": "${{ inputs.message }}" }'
+        MSGTYPE=$( [ "${{ inputs.trigger-notification }}" = "true" ] && echo "m.text" || echo "m.notice" )
+        curl -X POST "${{ inputs.tchap-url }}" \
+          -H "Authorization: Bearer ${{ inputs.tchap-token }}" \
+          -H "Content-Type: application/json" \
+          -d '{ "msgtype": "'"$MSGTYPE"'", "formatted_body": "${{ inputs.message }}" ,"format": "org.matrix.custom.html", "body": "${{ inputs.message }}" }'
       shell: bash
