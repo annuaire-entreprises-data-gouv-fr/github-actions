@@ -29,8 +29,10 @@ inputs:
   notify-on-success:
     required: false
     default: false
-  notify-webhook:
-    description: "Webhook to use for notifications"
+  tchap-url:
+    description: "Tchap URL needed to send the notification"
+  tchap-token:
+    description: "Token"
 
 runs:
   using: "composite"
@@ -51,12 +53,16 @@ runs:
       if: failure() && inputs.notify-on-failure
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
-        message: "🚨 Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment }}** failed !"
-        hook: ${{ inputs.notify-webhook }}
+        message: "🚨 Déploiement de **${{ inputs.app-shortname }}** sur **${{ inputs.environment }}** échoué !"
+        tchap-url: ${{ inputs.tchap-room }}
+        tchap-token: ${{ inputs.tchap-token }}
+        trigger-notification: true
     
     - name: Notify success
       if: success() && inputs.notify-on-success
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
-        message: ":white_check_mark: Deployment of **${{ inputs.app-shortname }}** to **${{ inputs.environment}}** succeeded !"
-        hook: ${{ inputs.notify-webhook }}
+        message: "✅ Déploiement de **${{ inputs.app-shortname }}** sur **${{ inputs.environment}}** réussi !"
+        tchap-url: ${{ inputs.tchap-room }}
+        tchap-token: ${{ inputs.tchap-token }}
+        trigger-notification: false
