@@ -51,7 +51,7 @@ runs:
 
     - name: Notify failure
       if: failure() && inputs.notify-on-failure
-      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
+      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1.1
       with:
         message: "🚨 Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment }}</strong> échoué !"
         tchap-url: ${{ inputs.tchap-url }}
@@ -60,7 +60,7 @@ runs:
     
     - name: Notify success
       if: success() && inputs.notify-on-success
-      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
+      uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1.1
       with:
         message: "✅ Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment}}</strong> réussi !"
         tchap-url: ${{ inputs.tchap-url }}
