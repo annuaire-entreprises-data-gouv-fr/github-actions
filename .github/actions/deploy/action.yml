@@ -54,7 +54,7 @@ runs:
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
         message: "🚨 Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment }}</strong> échoué !"
-        tchap-url: ${{ inputs.tchap-room }}
+        tchap-url: ${{ inputs.tchap-url }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: true
     
@@ -63,6 +63,6 @@ runs:
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
         message: "✅ Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment}}</strong> réussi !"
-        tchap-url: ${{ inputs.tchap-room }}
+        tchap-url: ${{ inputs.tchap-url }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: false
