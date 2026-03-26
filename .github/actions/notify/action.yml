@@ -7,7 +7,7 @@ inputs:
   tchap-token:
     description: "Jeton d'authentification utilisé"
   trigger-notification:
-    description: "Si true, enovie une notification"
+    description: "Si true, envoie une notification"
     default: "true"
   message:
     description: "Body"
@@ -22,5 +22,5 @@ runs:
         curl -X POST "${{ inputs.tchap-url }}" \
           -H "Authorization: Bearer ${{ inputs.tchap-token }}" \
           -H "Content-Type: application/json" \
-          -d '{ "msgtype": "'"$MSGTYPE"'", "body": "${{ inputs.message }}" }'
+          -d '{ "msgtype": "'"$MSGTYPE"'", "formatted_body": "${{ inputs.message }}" ,"format": "org.matrix.custom.html", "body": "${{ inputs.message }}" }'
       shell: bash
