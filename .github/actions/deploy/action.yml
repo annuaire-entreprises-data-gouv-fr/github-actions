@@ -53,7 +53,7 @@ runs:
       if: failure() && inputs.notify-on-failure
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
-        message: "🚨 Déploiement de **${{ inputs.app-shortname }}** sur **${{ inputs.environment }}** échoué !"
+        message: "🚨 Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment }}</strong> échoué !"
         tchap-url: ${{ inputs.tchap-room }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: true
@@ -62,7 +62,7 @@ runs:
       if: success() && inputs.notify-on-success
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1
       with:
-        message: "✅ Déploiement de **${{ inputs.app-shortname }}** sur **${{ inputs.environment}}** réussi !"
+        message: "✅ Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment}}</strong> réussi !"
         tchap-url: ${{ inputs.tchap-room }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: false
