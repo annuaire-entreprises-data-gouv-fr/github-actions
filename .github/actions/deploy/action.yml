@@ -14,23 +14,22 @@ inputs:
     required: true
   ssh-key:
     description: "SSH key used for the deployment"
-    secret: true
     required: true
   ssh-host:
     description: "SSH host"
-    secret: true
     required: true
   notify-on-failure:
+    description: "Whether to send a notification on failure or not"
     required: false
-    default: true
+    default: "true"
   notify-on-success:
+    description: "Whether to send a notification on success or not"
     required: false
-    default: false
+    default: "false"
   tchap-url:
     description: "Tchap URL needed to send the notification"
   tchap-token:
     description: "Token"
-    secret: true
 
 runs:
   using: "composite"
