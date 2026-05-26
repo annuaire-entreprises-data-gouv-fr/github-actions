@@ -44,7 +44,7 @@ runs:
 
     - name: Deploy to ${{ inputs.environment }}
       shell: bash
-      run: ssh -i ./deploy.key github-app-deployer@${{ inputs.ssh-host }} 'sudo bash /opt/docker/app/{{ inputs.app }}/start-new-version.sh {{ inputs.app}} {{ inputs.version }}'
+      run: ssh -i ./deploy.key github-app-deployer@${{ inputs.ssh-host }} 'cd /opt/docker/app/{{ inputs.app }} && sudo bash /opt/docker/app/{{ inputs.app }}/start-new-version.sh {{ inputs.app}} {{ inputs.version }}'
 
     - name: Notify failure
       if: failure() && inputs.notify-on-failure
