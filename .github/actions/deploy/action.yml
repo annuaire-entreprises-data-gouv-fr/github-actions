@@ -2,13 +2,8 @@ name: Deploy
 description: Deploie un applicatif
 
 inputs:
-  app-to-deploy:
+  app:
     description: "Name of the application to deploy"
-    required: true
-  app-repository:
-    description: "Repository of the application to deploy"
-    required: true
-  app-shortname:
     required: true
   version:
     description: "Version to deploy"
@@ -24,11 +19,13 @@ inputs:
     description: "SSH host"
     required: true
   notify-on-failure:
+    description: "Whether to send a notification on failure or not"
     required: false
-    default: true
+    default: "true"
   notify-on-success:
+    description: "Whether to send a notification on success or not"
     required: false
-    default: false
+    default: "false"
   tchap-url:
     description: "Tchap URL needed to send the notification"
   tchap-token:
@@ -47,13 +44,13 @@ runs:
 
     - name: Deploy to ${{ inputs.environment }}
       shell: bash
-      run: ssh -i ./deploy.key www-data@${{ inputs.ssh-host }} 'python3 /opt/scripts/app-deploy-release/deploy.py /opt/git/releases/${{ inputs.app-to-deploy }} ${{ inputs.app-repository }} ${{ inputs.app-shortname }} --version {{ inputs.version }} --versions_to_keep=5 1> >(tee --append /var/log/deploy_{{ inputs.app-to-deploy }})'
+      run: ssh -i ./deploy.key github-app-deployer@${{ inputs.ssh-host }} 'deploy ${{ inputs.app}} ${{ inputs.version }}'
 
     - name: Notify failure
       if: failure() && inputs.notify-on-failure
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1.1
       with:
-        message: "🚨 Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment }}</strong> échoué !"
+        message: "🚨 Déploiement de <strong>${{ inputs.app }}</strong> sur <strong>${{ inputs.environment }}</strong> échoué !"
         tchap-url: ${{ inputs.tchap-url }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: true
@@ -62,7 +59,7 @@ runs:
       if: success() && inputs.notify-on-success
       uses: annuaire-entreprises-data-gouv-fr/github-actions/.github/actions/notify@v1.1
       with:
-        message: "✅ Déploiement de <strong>${{ inputs.app-shortname }}</strong> sur <strong>${{ inputs.environment}}</strong> réussi !"
+        message: "✅ Déploiement de <strong>${{ inputs.app }}</strong> sur <strong>${{ inputs.environment}}</strong> réussi !"
         tchap-url: ${{ inputs.tchap-url }}
         tchap-token: ${{ inputs.tchap-token }}
         trigger-notification: false
