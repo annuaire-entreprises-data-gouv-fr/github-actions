@@ -1,0 +1,19 @@
+name: "Wireguard UP"
+description: "Permet de se connecter à un VPN Wireguard"
+
+inputs:
+  wg-config-file:
+    description: "Fichier de configuration wireguard pour le client"
+
+runs:
+  using: "composite"
+
+  steps:
+    - run: |
+        sudo apt install resolvconf
+        sudo apt install wireguard
+        echo "${{ inputs.wg-config-file }}" > wg0.conf
+        sudo chmod 600 wg0.conf
+        echo "Connecting to wireguard"
+        sudo wg-quick up ./wg0.conf
+      shell: bash
