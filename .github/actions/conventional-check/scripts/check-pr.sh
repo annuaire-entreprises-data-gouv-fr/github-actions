@@ -4,8 +4,14 @@ set -euo pipefail
 
 if [[ -f "${GITHUB_EVENT_PATH:-}" ]]; then
   PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+  PR_AUTHOR=$(jq -r .pull_request.user.login "$GITHUB_EVENT_PATH")
 else
   echo "⚠️  Aucun payload d’événement disponible – la vérification du titre de PR sera ignorée."
+  exit 0
+fi
+
+if [[ "$PR_AUTHOR" == "dependabot[bot]" ]]; then
+  echo "⚠️  PR ouverte par Dependabot – la vérification du titre de PR sera ignorée."
   exit 0
 fi
 
